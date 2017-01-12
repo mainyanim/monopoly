@@ -75,6 +75,8 @@ Monopoly.rollDice = function(){
     $(".dice#dice2").attr("data-num",result2).find(".dice-dot.num" + result2).css("opacity",1);
     if (result1 == result2){
         Monopoly.doubleCounter++;
+    } else {
+      Monopoly.doubleCounter = 0;
     }
     var currentPlayer = Monopoly.getCurrentPlayer();
     Monopoly.handleAction(currentPlayer,"move",result1 + result2);
@@ -127,7 +129,12 @@ Monopoly.handleTurn = function(){
 Monopoly.setNextPlayerTurn = function(){
     var currentPlayerTurn = Monopoly.getCurrentPlayer();
     var playerId = parseInt(currentPlayerTurn.attr("id").replace("player",""));//replacing current player
+
+    if (Monopoly.doubleCounter == 0) {
     var nextPlayerId = playerId + 1;
+    } else if (Monopoly.doubleCounter > 0) {
+    var nextPlayerId = playerId;
+    }
     if (nextPlayerId > $(".player").length){
         nextPlayerId = 1;
     }
