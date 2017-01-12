@@ -1,7 +1,7 @@
 var Monopoly = {};
 Monopoly.allowRoll = true;
 //allows to start a game
-Monopoly.moneyAtStart = 20;
+Monopoly.moneyAtStart = 50;
 //start amount fixed from 1000 to 50
 Monopoly.doubleCounter = 0;
 
@@ -103,7 +103,6 @@ Monopoly.handleTurn = function(){
     var player = Monopoly.getCurrentPlayer();
     var playerCell = Monopoly.getPlayersCell(player);
     if (playerCell.attr("data-owner") === player.attr("id")) {
-      // if (playerCell.attr(".property:not(.available)") && playerCell.hasClass(player.attr("id"))) {
       player.addClass("smiley");
     } else {
       player.removeClass("smiley");
@@ -356,7 +355,7 @@ Monopoly.getNextCell = function(cell){
 
 Monopoly.handlePassedGo = function(){
     var player = Monopoly.getCurrentPlayer();
-    Monopoly.updatePlayersGo(player,Monopoly.moneyAtStart*4);
+    Monopoly.updatePlayersGo(player,10);
 };
 
 
