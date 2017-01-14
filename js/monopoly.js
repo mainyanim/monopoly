@@ -43,7 +43,7 @@ Monopoly.getPlayersCell = function(player){
 
 Monopoly.getPlayersMoney = function(player){
     return parseInt(player.attr("data-money"));
-    $('#cash'+player.attr("id")).text(player.attr("id") + ": $" + playersMoney);
+    $('#cash'+player.attr("id")).text("$" + playersMoney);
 
 };
 //returns the player's wallet as an integer
@@ -59,7 +59,7 @@ Monopoly.updatePlayersMoney = function(player,amount){
          Monopoly.setNextPlayerTurn();
      }
   player.attr("data-money",playersMoney);
-  $('#cash'+player.attr("id")).text(player.attr("id") + ": $" + playersMoney);
+  $('#cash'+player.attr("id")).text("$" + playersMoney);
 
 //    Monopoly.playSound("chaching");
 };
@@ -343,7 +343,7 @@ Monopoly.createPlayers = function(numOfPlayers){
     for (var i=1; i<= numOfPlayers; i++){
         var player = $("<div />").addClass("player shadowed").attr("id","player" + i);
         startCell.find(".content").append(player);
-        var bankBox = $("<p />").addClass("bank").attr("title","player" + i + ": $" + Monopoly.moneyAtStart).attr("id","cashplayer" + i);;
+        var bankBox = $("<p />").addClass("bank"+i).attr("title","player" + i + ": $" + Monopoly.moneyAtStart).attr("id","cashplayer" + i);;
         $('#bank').append(bankBox);
         if (i==1){
             player.addClass("current-turn");
