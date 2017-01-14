@@ -175,6 +175,11 @@ body{
         width: 40%;
 }
 
+.bank {
+  width: 100px;
+  height: 100px;
+  border: 2px solid black;
+}
 
 .left.game.cell:not(.corner) .player , .right.game.cell:not(.corner) .player{
     height: 40%;

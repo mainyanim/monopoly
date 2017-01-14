@@ -43,6 +43,8 @@ Monopoly.getPlayersCell = function(player){
 
 Monopoly.getPlayersMoney = function(player){
     return parseInt(player.attr("data-money"));
+    $('#cash'+player.attr("id")).text(player.attr("id") + ": $" + playersMoney);
+
 };
 //returns the player's wallet as an integer
 
@@ -56,9 +58,10 @@ Monopoly.updatePlayersMoney = function(player,amount){
          Monopoly.playerBroken();
          Monopoly.setNextPlayerTurn();
      }
-    player.attr("data-money",playersMoney);
-$("#cash").innerText = player.attr("id") + ": $" + playersMoney//    
-// Monopoly.playSound("chaching");
+  player.attr("data-money",playersMoney);
+  $('#cash'+player.attr("id")).text(player.attr("id") + ": $" + playersMoney);
+
+//    Monopoly.playSound("chaching");
 };
 //allows to buy
 
@@ -66,8 +69,8 @@ Monopoly.updatePlayersGo = function (player, amount) {
   var playersMoney = parseInt(player.attr("data-money"));
   playersMoney += amount;
   player.attr("data-money",playersMoney);
-  player.attr("title",player.attr("id") + ": $" + playersMoney);
-//  Monopoly.playSound("chaching");
+  $('#cash'+player.attr("id")).text(player.attr("id") + ": $" + playersMoney);
+  //  Monopoly.playSound("chaching");
 }
 
 Monopoly.rollDice = function(){
@@ -338,13 +341,16 @@ Monopoly.handleAction = function(player,action,amount){
 Monopoly.createPlayers = function(numOfPlayers){
     var startCell = $(".go");
     for (var i=1; i<= numOfPlayers; i++){
-        var player = $("<div />").addClass("player shadowed").attr("id","player" + i).attr("title","player" + i + ": $" + Monopoly.moneyAtStart);
+        var player = $("<div />").addClass("player shadowed").attr("id","player" + i);
         startCell.find(".content").append(player);
+        var bankBox = $("<p />").addClass("bank").attr("title","player" + i + ": $" + Monopoly.moneyAtStart).attr("id","cashplayer" + i);;
+        $('#bank').append(bankBox);
         if (i==1){
             player.addClass("current-turn");
         }
         player.attr("data-money",Monopoly.moneyAtStart);
     }
+
 };
 
 
