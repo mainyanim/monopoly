@@ -51,11 +51,12 @@ Monopoly.updatePlayersMoney = function(player,amount){
     if (playersMoney < 0 ){
       setTimeout(function(){
       Monopoly.showPopup("broke")
-    },2000);
-    };
+    },5000);
+      Monopoly.closePopup("broke");
+    }; //remove loser from the game
     player.attr("data-money",playersMoney);
     player.attr("title",player.attr("id") + ": $" + playersMoney);
-    Monopoly.playSound("chaching");
+//    Monopoly.playSound("chaching");
 };
 //allows to buy
 
@@ -64,7 +65,7 @@ Monopoly.updatePlayersGo = function (player, amount) {
   playersMoney += amount;
   player.attr("data-money",playersMoney);
   player.attr("title",player.attr("id") + ": $" + playersMoney);
-  Monopoly.playSound("chaching");
+//  Monopoly.playSound("chaching");
 }
 
 Monopoly.rollDice = function(){
@@ -243,7 +244,7 @@ Monopoly.sendToJail = function(player){
     player.addClass("jailed");
     player.attr("data-jail-time",1);
     $(".corner.game.cell.in-jail").append(player);
-    Monopoly.playSound("woopwoop");
+  //  Monopoly.playSound("woopwoop");
     Monopoly.setNextPlayerTurn();
     Monopoly.closePopup();
 };
@@ -291,7 +292,7 @@ Monopoly.handleBuy = function(player,propertyCell,propertyCost){
     var playersMoney = Monopoly.getPlayersMoney(player)
     if (playersMoney < propertyCost){
         Monopoly.showErrorMsg();
-        Monopoly.playSound("loser");
+  //      Monopoly.playSound("loser");
     }else{
 
         Monopoly.updatePlayersMoney(player,propertyCost);
