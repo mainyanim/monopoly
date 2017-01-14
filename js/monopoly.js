@@ -4,6 +4,7 @@ Monopoly.allowRoll = true;
 Monopoly.moneyAtStart = 50;
 //start amount fixed from 1000 to 50
 Monopoly.doubleCounter = 0;
+Monopoly.playerIsBroken = false;
 
 Monopoly.init = function(){
     $(document).ready(function(){
@@ -48,15 +49,16 @@ Monopoly.getPlayersMoney = function(player){
 Monopoly.updatePlayersMoney = function(player,amount){
     var playersMoney = parseInt(player.attr("data-money"));
     playersMoney -= amount;
-    if (playersMoney < 0 ){
-      setTimeout(function(){
-      Monopoly.showPopup("broke")
-    },5000);
-      Monopoly.closePopup("broke");
-    }; //remove loser from the game
+    if (playersMoney < 0) { // we need to check if player is broke
+         Monopoly.playerIsBroken = true;
+     }
+     if (Monopoly.playerIsBroken === true) {
+         Monopoly.playerBroken();
+         Monopoly.setNextPlayerTurn();
+     }
     player.attr("data-money",playersMoney);
-    player.attr("title",player.attr("id") + ": $" + playersMoney);
-//    Monopoly.playSound("chaching");
+$("#cash").innerText = player.attr("id") + ": $" + playersMoney//    
+// Monopoly.playSound("chaching");
 };
 //allows to buy
 
@@ -137,6 +139,9 @@ Monopoly.setNextPlayerTurn = function(){
     }
     if (nextPlayerId > $(".player").length){
         nextPlayerId = 1;
+    }
+    if (Monopoly.playerIsBroken) {
+      var nextPlayerId = 1;
     }
     currentPlayerTurn.removeClass("current-turn");
     var nextPlayer = $(".player#player" + nextPlayerId);
@@ -356,7 +361,7 @@ Monopoly.getNextCell = function(cell){
 
 Monopoly.handlePassedGo = function(){
     var player = Monopoly.getCurrentPlayer();
-    Monopoly.updatePlayersGo(player,10);
+    //Monopoly.updatePlayersGo(player,10);
 };
 
 
@@ -387,6 +392,7 @@ Monopoly.showErrorMsg = function(){
 };
 
 
+
 Monopoly.adjustBoardSize = function(){
     var gameBoard = $(".board");
     var boardSize = Math.min($(window).height(),$(window).width());
@@ -407,6 +413,23 @@ Monopoly.showPopup = function(popupId){
     $(".popup-lightbox .popup-page").hide();
     $(".popup-lightbox .popup-page#" + popupId).show();
     $(".popup-lightbox").fadeIn();
+};
+
+Monopoly.playerBroken = function () {
+    var player = Monopoly.getCurrentPlayer();
+    var playerId = parseInt(player.attr("id").replace("player", ""));
+    var playerCash = Monopoly.getPlayersMoney(player);
+    var playerCell = Monopoly.getPlayersCell(player);
+    Monopoly.showPopup("broke");
+    setTimeout(function () {
+        $(".popup-lightbox").fadeOut();
+    }, 5000);
+//we need to inform the user that he's broke
+    $('.property.player' + playerId)
+                                    .addClass('available')
+                                    .removeClass('player' + playerId)
+                                    .removeAttr("data-owner");
+    $('#player' + playerId).detach();
 };
 
 Monopoly.init();
