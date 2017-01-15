@@ -223,6 +223,10 @@ body{
   vertical-align: middle;
 }
 
+.broke {
+display: none;
+}
+
 .bankstatus {
   margin-top: 20px;
   margin-left: 50px;

@@ -56,12 +56,11 @@ Monopoly.updatePlayersMoney = function(player,amount){
      }
      if (Monopoly.playerIsBroken === true) {
          Monopoly.playerBroken();
-         Monopoly.setNextPlayerTurn();
      }
   player.attr("data-money",playersMoney);
   $('#cash'+player.attr("id")).text("$" + playersMoney);
 
-//    Monopoly.playSound("chaching");
+   Monopoly.playSound("chaching");
 };
 //allows to buy
 
@@ -70,7 +69,7 @@ Monopoly.updatePlayersGo = function (player, amount) {
   playersMoney += amount;
   player.attr("data-money",playersMoney);
   $('#cash'+player.attr("id")).text(player.attr("id") + ": $" + playersMoney);
-  //  Monopoly.playSound("chaching");
+   Monopoly.playSound("chaching");
 }
 
 Monopoly.rollDice = function(){
@@ -143,9 +142,6 @@ Monopoly.setNextPlayerTurn = function(){
     if (nextPlayerId > $(".player").length){
         nextPlayerId = 1;
     }
-    if (Monopoly.playerIsBroken) {
-      var nextPlayerId = 1;
-    }
     currentPlayerTurn.removeClass("current-turn");
     var nextPlayer = $(".player#player" + nextPlayerId);
     nextPlayer.addClass("current-turn");
@@ -159,6 +155,10 @@ Monopoly.setNextPlayerTurn = function(){
         }
         Monopoly.setNextPlayerTurn();
         return;
+    }
+    if (nextPlayer.is(".broke")) {
+      Monopoly.setNextPlayerTurn();
+      return;
     }
     Monopoly.closePopup();
     Monopoly.allowRoll = true;
@@ -252,7 +252,7 @@ Monopoly.sendToJail = function(player){
     player.addClass("jailed");
     player.attr("data-jail-time",1);
     $(".corner.game.cell.in-jail").append(player);
-  //  Monopoly.playSound("woopwoop");
+   Monopoly.playSound("woopwoop");
     Monopoly.setNextPlayerTurn();
     Monopoly.closePopup();
 };
@@ -300,7 +300,7 @@ Monopoly.handleBuy = function(player,propertyCell,propertyCost){
     var playersMoney = Monopoly.getPlayersMoney(player)
     if (playersMoney < propertyCost){
         Monopoly.showErrorMsg();
-  //      Monopoly.playSound("loser");
+       Monopoly.playSound("loser");
     }else{
 
         Monopoly.updatePlayersMoney(player,propertyCost);
@@ -313,7 +313,7 @@ Monopoly.handleBuy = function(player,propertyCell,propertyCost){
         Monopoly.setNextPlayerTurn();
     }
 };
-//sets player's property belonged to player
+//sets player's property belonged to him
 
 
 
@@ -329,6 +329,9 @@ Monopoly.handleAction = function(player,action,amount){
             break;
         case "jail":
             Monopoly.sendToJail(player);
+            break;
+        case "broke":
+            Monopoly.playerBroken(player);
             break;
         };
     Monopoly.closePopup();
@@ -367,7 +370,7 @@ Monopoly.getNextCell = function(cell){
 
 Monopoly.handlePassedGo = function(){
     var player = Monopoly.getCurrentPlayer();
-    //Monopoly.updatePlayersGo(player,10);
+    // Monopoly.updatePlayersGo(player,Monopoly.moneyAtStart);
 };
 
 
@@ -423,6 +426,7 @@ Monopoly.showPopup = function(popupId){
 
 Monopoly.playerBroken = function () {
     var player = Monopoly.getCurrentPlayer();
+    player.addClass("broke");
     var playerId = parseInt(player.attr("id").replace("player", ""));
     var playerCash = Monopoly.getPlayersMoney(player);
     var playerCell = Monopoly.getPlayersCell(player);
@@ -432,10 +436,9 @@ Monopoly.playerBroken = function () {
     }, 5000);
 //we need to inform the user that he's broke
     $('.property.player' + playerId)
-                                    .addClass('available')
                                     .removeClass('player' + playerId)
+                                    .addClass('available')
                                     .removeAttr("data-owner");
-    $('#player' + playerId).detach();
 };
 
 Monopoly.init();
